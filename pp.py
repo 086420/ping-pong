@@ -3,6 +3,11 @@ win_width = 700
 win_height = 500
 window = display.set_mode((700, 500))
 
+font.init()
+font1 = font.Font(None, 35)
+lose1 = font1.render('PLAYER 1 LOSE', True, (180, 0, 0))
+lose2 = font1.render('PLAYER 2 LOSE', True, (180, 0, 0))
+
 display.set_caption("ping")
 background = transform.scale(image.load("low-poly-texture.jpg"),(700, 500))
 game = True
@@ -27,13 +32,13 @@ class Player(GameSprite):
         keys_pressed = key.get_pressed()
         if keys_pressed[K_UP] and self.rect.y > 5:
             self.rect.y -= self.speed
-        if keys_pressed[K_DOWN] and self.rect.y < win_height -150:
+        if keys_pressed[K_DOWN] and self.rect.y < win_height -100:
             self.rect.y += self.speed
     def update_l(self):
         keys_pressed = key.get_pressed()
         if keys_pressed[K_w] and self.rect.y > 5:
             self.rect.y -= self.speed
-        if keys_pressed[K_s] and self.rect.y  < win_height -150:
+        if keys_pressed[K_s] and self.rect.y  < win_height -100:
             self.rect.y += self.speed
 player1 = Player('ракеткалев.png', 5, 400,100, 100, 4)
 player2 = Player('ракеткаправ.png', 600, 400,100, 100, 4)
@@ -54,7 +59,14 @@ while game:
         ball.reset()
     if ball.rect.y > win_height -50 or ball.rect.y < 0:
         speed_y *= -1
-
+    if sprite.collide_rect(player1, ball) or sprite.collide_rect(player2, ball):
+        speed_x *= -1
+    if ball.rect.x < 0:
+        finish = True
+        window.blit(lose1, (200, 200))
+    if ball.rect.x > 700:
+        finish = True
+        window.blit(lose2, (200, 200))
         
     display.update()
     clock.tick(FPS)
