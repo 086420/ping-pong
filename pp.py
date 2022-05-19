@@ -52,6 +52,8 @@ while game:
         ball.rect.x += speed_x
         ball.rect.y += speed_y
         ball.reset()
+    if ball.rect.y > win_height -50 or ball.rect.y < 0:
+        speed_y *= -1
 
         
     display.update()
